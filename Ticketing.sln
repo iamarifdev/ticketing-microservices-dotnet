@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ticketing.Auth", "src\Ticketing.Auth\Ticketing.Auth.csproj", "{D887634F-6CF7-446F-BC94-A7806BC4C5B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ticketing.Common", "src\Ticketing.Common\Ticketing.Common.csproj", "{60EFA33B-9C41-4B20-8987-8ADAEB08F4D5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D887634F-6CF7-446F-BC94-A7806BC4C5B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D887634F-6CF7-446F-BC94-A7806BC4C5B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D887634F-6CF7-446F-BC94-A7806BC4C5B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D887634F-6CF7-446F-BC94-A7806BC4C5B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60EFA33B-9C41-4B20-8987-8ADAEB08F4D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60EFA33B-9C41-4B20-8987-8ADAEB08F4D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60EFA33B-9C41-4B20-8987-8ADAEB08F4D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60EFA33B-9C41-4B20-8987-8ADAEB08F4D5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
