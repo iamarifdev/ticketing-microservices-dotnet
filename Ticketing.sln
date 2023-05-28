@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ticketing.Auth", "src\Ticke
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ticketing.Common", "src\Ticketing.Common\Ticketing.Common.csproj", "{60EFA33B-9C41-4B20-8987-8ADAEB08F4D5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ticketing.Common.Tests", "tests\Ticketing.Common.Tests\Ticketing.Common.Tests.csproj", "{3551ABD5-EE88-432C-8F58-CDC7C948AD2D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{60EFA33B-9C41-4B20-8987-8ADAEB08F4D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60EFA33B-9C41-4B20-8987-8ADAEB08F4D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60EFA33B-9C41-4B20-8987-8ADAEB08F4D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3551ABD5-EE88-432C-8F58-CDC7C948AD2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3551ABD5-EE88-432C-8F58-CDC7C948AD2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3551ABD5-EE88-432C-8F58-CDC7C948AD2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3551ABD5-EE88-432C-8F58-CDC7C948AD2D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

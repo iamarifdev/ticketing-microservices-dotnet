@@ -10,6 +10,7 @@ namespace Ticketing.Common.Middlewares;
 
 public class CurrentUserMiddleware
 {
+    private const string JWT_KEY = "JWT_KEY";
     private readonly ILogger<CurrentUserMiddleware> _logger;
     private readonly RequestDelegate _next;
 
@@ -36,10 +37,10 @@ public class CurrentUserMiddleware
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY") 
-                                            ?? throw new InvalidOperationException("JWT_KEY is not set"))),
+                    Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable(JWT_KEY) 
+                                            ?? throw new InvalidOperationException($"{JWT_KEY} is not set"))),
                 ValidateIssuer = false,
-                ValidateAudience = false
+                ValidateAudience = false,
             };
 
             var user = handler.ValidateToken(token, tokenValidationParameters, out _);
@@ -52,11 +53,10 @@ public class CurrentUserMiddleware
             
             var claims = ((ClaimsIdentity)user.Identity).Claims.ToList();
 
-            var userPayload = new UserPayload
-            (
-                claims.First(c => c.Type == "id").Value, 
-                claims.First(c => c.Type == "email").Value
-            );
+            var userId = claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            var email = claims.First(c => c.Type == ClaimTypes.Email).Value;
+            
+            var userPayload = new UserPayload(userId, email);
 
             context.Items["User"] = userPayload;
         }
