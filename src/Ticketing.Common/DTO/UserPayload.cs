@@ -1,3 +1,3 @@
 namespace Ticketing.Common.DTO;
 
-public record UserPayload(string Id, string Email);
+public record UserPayload(int Id, string Email);

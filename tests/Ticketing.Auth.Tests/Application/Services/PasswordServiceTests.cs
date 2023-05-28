@@ -1,6 +1,6 @@
-using Ticketing.Common.Services;
+using Ticketing.Auth.Application.Services;
 
-namespace Ticketing.Common.Tests.Services;
+namespace Ticketing.Auth.Tests.Application.Services;
 
 [TestFixture]
 public class PasswordServiceTests

@@ -8,16 +8,16 @@ namespace Ticketing.Common.Services;
 
 public static class JwtTokenService
 {
-    public static string GenerateToken(UserPayload userPayload, JwtConfig config, string jwtKey)
+    public static string GenerateToken(UserPayload userPayload, JwtConfig config)
     {
         var claims = new List<Claim>
         {
-            new(ClaimTypes.NameIdentifier, userPayload.Id),
+            new(ClaimTypes.NameIdentifier, userPayload.Id.ToString()),
             new(ClaimTypes.Email, userPayload.Email)
         };
 
         // todo: use RSA cryptography to sign the token instead of HMAC (private/public key)
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtConfig.JwtKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var token = new JwtSecurityToken(

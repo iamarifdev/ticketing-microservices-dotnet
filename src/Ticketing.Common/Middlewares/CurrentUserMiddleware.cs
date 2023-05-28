@@ -10,7 +10,6 @@ namespace Ticketing.Common.Middlewares;
 
 public class CurrentUserMiddleware
 {
-    private const string JWT_KEY = "JWT_KEY";
     private readonly ILogger<CurrentUserMiddleware> _logger;
     private readonly RequestDelegate _next;
 
@@ -29,18 +28,16 @@ public class CurrentUserMiddleware
         }
 
         var token = authHeader.ToString().Replace("Bearer ", string.Empty);
-        
+
         try
         {
             var handler = new JwtSecurityTokenHandler();
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.ASCII.GetBytes(Environment.GetEnvironmentVariable(JWT_KEY) 
-                                            ?? throw new InvalidOperationException($"{JWT_KEY} is not set"))),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JwtConfig.JwtKey)),
                 ValidateIssuer = false,
-                ValidateAudience = false,
+                ValidateAudience = false
             };
 
             var user = handler.ValidateToken(token, tokenValidationParameters, out _);
@@ -50,19 +47,20 @@ public class CurrentUserMiddleware
                 _logger.LogError("User identity claims not found");
                 throw new InvalidOperationException("User identity claims not found");
             }
-            
+
             var claims = ((ClaimsIdentity)user.Identity).Claims.ToList();
 
             var userId = claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
             var email = claims.First(c => c.Type == ClaimTypes.Email).Value;
-            
-            var userPayload = new UserPayload(userId, email);
+
+            var userPayload = new UserPayload(int.Parse(userId), email);
 
             context.Items["User"] = userPayload;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message);
+            throw;
         }
 
         await _next(context);

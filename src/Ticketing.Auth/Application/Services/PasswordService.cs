@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 
-namespace Ticketing.Common.Services;
+namespace Ticketing.Auth.Application.Services;
 
 public static class PasswordService
 {
