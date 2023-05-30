@@ -26,7 +26,7 @@ public class PasswordServiceTests
         var hashedPassword = await PasswordService.ToHash(password);
 
         // Act
-        var result = await PasswordService.Compare(hashedPassword, password);
+        var result = await PasswordService.VerifyHash(hashedPassword, password);
 
         // Assert
         result.Should().BeTrue();
@@ -41,7 +41,7 @@ public class PasswordServiceTests
         var hashedPassword = await PasswordService.ToHash(password);
 
         // Act
-        var result = await PasswordService.Compare(hashedPassword, invalidPassword);
+        var result = await PasswordService.VerifyHash(hashedPassword, invalidPassword);
 
         // Assert
         result.Should().BeFalse();

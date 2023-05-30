@@ -19,7 +19,7 @@ public static class PasswordService
         return $"{hash}.{salt}";
     }
 
-    public static async Task<bool> Compare(string storedPassword, string suppliedPassword)
+    public static async Task<bool> VerifyHash(string storedPassword, string suppliedPassword)
     {
         var passwordParts = storedPassword.Split('.');
         if (passwordParts.Length != 2)

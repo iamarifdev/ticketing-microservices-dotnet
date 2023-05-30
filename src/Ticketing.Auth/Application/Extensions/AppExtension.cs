@@ -20,6 +20,7 @@ public static class AppExtension
     public static void AddFluentValidation(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<IValidator<SignupRequest>, SignupCommandValidator>();
+        builder.Services.AddScoped<IValidator<SignInCommand>, SignInCommandValidator>();
     }
 
     public static void AddMediatR(this WebApplicationBuilder builder)
@@ -59,8 +60,11 @@ public static class AppExtension
     
     public static void MapRoutes(this WebApplication app)
     {
-        var auth = app.MapGroup("/auth").WithTags("Auth Service").WithName("Auth Service");
+        var auth = app.MapGroup("/auth")
+            .WithTags("Auth Service")
+            .WithName("Auth Service");
         
-        auth.MapPost("/signup", AuthRouteHandlers.Signup);
+        auth.MapPost("/signup", AuthRouteHandlers.Signup).WithName("Signup");
+        auth.MapPost("/signin", AuthRouteHandlers.SignIn).WithName("Signin");
     }
 }

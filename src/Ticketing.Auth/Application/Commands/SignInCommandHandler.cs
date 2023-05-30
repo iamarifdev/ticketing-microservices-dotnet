@@ -4,21 +4,20 @@ using Microsoft.Extensions.Options;
 using Ticketing.Auth.Application.DTO;
 using Ticketing.Auth.Application.Extensions;
 using Ticketing.Auth.Application.Services;
-using Ticketing.Auth.Domain.Entities;
 using Ticketing.Auth.Persistence.Repositories;
 using Ticketing.Common.DTO;
 
 namespace Ticketing.Auth.Application.Commands;
 
-public class SignupCommandHandler : IRequestHandler<SignupCommand, AuthResponse>
+public class SignInCommandHandler : IRequestHandler<SignInCommand, AuthResponse>
 {
     private readonly IOptions<JwtConfig> _jwtConfig;
     private readonly IUserRepository _userRepository;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public SignupCommandHandler(
+    public SignInCommandHandler(
         IUserRepository userRepository, 
-        IOptions<JwtConfig> jwtConfig,
+        IOptions<JwtConfig> jwtConfig, 
         IHttpContextAccessor httpContextAccessor)
     {
         _userRepository = userRepository;
@@ -26,12 +25,13 @@ public class SignupCommandHandler : IRequestHandler<SignupCommand, AuthResponse>
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<AuthResponse> Handle(SignupCommand request, CancellationToken cancellationToken)
+    public async Task<AuthResponse> Handle(SignInCommand dto, CancellationToken cancellationToken)
     {
-        var user = request.Dto.Adapt<User>();
-        user.Password = await PasswordService.ToHash(user.Password);
+        var user = await _userRepository.GetByEmailAsync(dto.Email.Trim());
 
-        await _userRepository.CreateAsync(user);
+        if (user is null || !await PasswordService.VerifyHash(user.Password, dto.Password))
+            throw new UnauthorizedAccessException("Invalid credentials");
+
         var response = user.Adapt<AuthResponse>();
         
         return response

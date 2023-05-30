@@ -8,7 +8,7 @@ namespace Ticketing.Auth.Presentation.Routes;
 
 public static class AuthRouteHandlers
 {
-    public static async Task<Results<Ok<SignupResponse>, ValidationProblem>> Signup(
+    public static async Task<Results<Ok<AuthResponse>, ValidationProblem>> Signup(
         IValidator<SignupRequest> validator, 
         IMediator mediator,
         SignupRequest dto)
@@ -17,6 +17,19 @@ public static class AuthRouteHandlers
         if (!validationResult.IsValid) return TypedResults.ValidationProblem(validationResult.ToDictionary());
         
         var result = await mediator.Send(new SignupCommand(dto));
+        
+        return TypedResults.Ok(result);
+    }
+    
+    public static async Task<Results<Ok<AuthResponse>, ValidationProblem>> SignIn(
+        IValidator<SignInCommand> validator, 
+        IMediator mediator,
+        SignInCommand signInCommand)
+    {
+        var validationResult = await validator.ValidateAsync(signInCommand);
+        if (!validationResult.IsValid) return TypedResults.ValidationProblem(validationResult.ToDictionary());
+        
+        var result = await mediator.Send(signInCommand);
         
         return TypedResults.Ok(result);
     }

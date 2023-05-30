@@ -8,7 +8,7 @@ public static class MappingConfig
 {
     public static void Configure()
     {
-        TypeAdapterConfig<User, SignupResponse>.NewConfig()
+        TypeAdapterConfig<User, AuthResponse>.NewConfig()
             .Map(dest => dest.Id, src => src.Id)
             .Map(dest => dest.Email, src => src.Email)
             .Map(dest => dest.FirstName, src => src.FirstName)
