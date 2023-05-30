@@ -6,6 +6,7 @@ using Ticketing.Auth.Application.Mapping;
 using Ticketing.Auth.Application.Validators;
 using Ticketing.Auth.Persistence;
 using Ticketing.Auth.Persistence.Repositories;
+using Ticketing.Auth.Presentation.Routes;
 
 namespace Ticketing.Auth.Application.Extensions;
 
@@ -54,5 +55,12 @@ public static class AppExtension
 
         var context = serviceProvider?.GetRequiredService<AuthDbContext>();
         context?.Database.Migrate();
+    }
+    
+    public static void MapRoutes(this WebApplication app)
+    {
+        var auth = app.MapGroup("/auth").WithTags("Auth Service").WithName("Auth Service");
+        
+        auth.MapPost("/signup", AuthRouteHandlers.Signup);
     }
 }

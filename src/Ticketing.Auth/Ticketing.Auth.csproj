@@ -35,8 +35,4 @@
         <ProjectReference Include="..\Ticketing.Common\Ticketing.Common.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Presentation\Routes\" />
-    </ItemGroup>
-
 </Project>

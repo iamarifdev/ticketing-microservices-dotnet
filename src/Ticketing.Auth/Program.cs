@@ -64,16 +64,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-app.MapGroup("/auth")
-    .WithTags("Auth Service")
-    .WithName("Auth Service")
-    .MapPost("/signup", async (IValidator<SignupRequest> validator, IMediator mediator, SignupRequest dto) =>
-    {
-        var validationResult = await validator.ValidateAsync(dto);
-
-        if (!validationResult.IsValid) return Results.ValidationProblem(validationResult.ToDictionary());
-        var result = await mediator.Send(new SignupCommand(dto));
-        return Results.Ok(result);
-    });
+app.MapRoutes();
 
 app.Run();
