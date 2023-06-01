@@ -33,4 +33,11 @@ public static class AuthRouteHandlers
         
         return TypedResults.Ok(result);
     }
+    
+    public static async Task<Ok<SignOutResponse>> SignOut(IMediator mediator, SignOutCommand signOutCommand)
+    {
+        var result = await mediator.Send(signOutCommand);
+        
+        return TypedResults.Ok(result);
+    }
 }

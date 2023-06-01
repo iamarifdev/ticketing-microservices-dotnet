@@ -66,5 +66,6 @@ public static class AppExtension
         
         auth.MapPost("/signup", AuthRouteHandlers.Signup).WithName("Signup");
         auth.MapPost("/signin", AuthRouteHandlers.SignIn).WithName("Signin");
+        auth.MapPost("/signout", AuthRouteHandlers.SignOut).WithName("SignOut");
     }
 }
