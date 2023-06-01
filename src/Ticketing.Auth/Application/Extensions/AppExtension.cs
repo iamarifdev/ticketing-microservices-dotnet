@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Ticketing.Auth.Application.Commands;
 using Ticketing.Auth.Application.DTO;
+using Ticketing.Auth.Application.Handlers;
 using Ticketing.Auth.Application.Mapping;
 using Ticketing.Auth.Application.Validators;
 using Ticketing.Auth.Persistence;
@@ -64,6 +65,7 @@ public static class AppExtension
             .WithTags("Auth Service")
             .WithName("Auth Service");
         
+        auth.MapGet("/currentuser", AuthRouteHandlers.GetCurrentUser).WithName("CurrentUser");
         auth.MapPost("/signup", AuthRouteHandlers.Signup).WithName("Signup");
         auth.MapPost("/signin", AuthRouteHandlers.SignIn).WithName("Signin");
         auth.MapPost("/signout", AuthRouteHandlers.SignOut).WithName("SignOut");

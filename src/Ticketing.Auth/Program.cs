@@ -4,6 +4,7 @@ using Microsoft.OpenApi.Models;
 using Ticketing.Auth.Application.Commands;
 using Ticketing.Auth.Application.DTO;
 using Ticketing.Auth.Application.Extensions;
+using Ticketing.Common.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,6 +61,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<CurrentUserMiddleware>();
 
 app.UseHttpsRedirection();
 

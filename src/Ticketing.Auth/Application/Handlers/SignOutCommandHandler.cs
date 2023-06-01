@@ -1,8 +1,9 @@
 using MediatR;
+using Ticketing.Auth.Application.Commands;
 using Ticketing.Auth.Application.DTO;
 using Ticketing.Auth.Application.Extensions;
 
-namespace Ticketing.Auth.Application.Commands;
+namespace Ticketing.Auth.Application.Handlers;
 
 public class SignOutCommandHandler : IRequestHandler<SignOutCommand, SignOutResponse>
 {

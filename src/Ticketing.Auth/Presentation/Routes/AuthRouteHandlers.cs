@@ -3,11 +3,20 @@ using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Ticketing.Auth.Application.Commands;
 using Ticketing.Auth.Application.DTO;
+using Ticketing.Auth.Application.Queries;
+using Ticketing.Common.DTO;
 
 namespace Ticketing.Auth.Presentation.Routes;
 
 public static class AuthRouteHandlers
 {
+    public static async Task<Ok<UserPayload>> GetCurrentUser(IMediator mediator)
+    {
+        var result = await mediator.Send(new GetCurrentUserQuery());
+        
+        return TypedResults.Ok(result);
+    }
+    
     public static async Task<Results<Ok<AuthResponse>, ValidationProblem>> Signup(
         IValidator<SignupRequest> validator, 
         IMediator mediator,

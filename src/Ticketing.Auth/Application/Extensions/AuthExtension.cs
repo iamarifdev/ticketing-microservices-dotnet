@@ -24,4 +24,15 @@ public static class AuthExtension
     {
         httpContextAccessor.RemoveCookie(Constants.Jwt);
     }
+    
+    public static UserPayload GetCurrentUser(this IHttpContextAccessor httpContextAccessor)
+    {
+        object? userPayload = null;
+        httpContextAccessor.HttpContext?.Items.TryGetValue(Constants.User, out userPayload);
+        
+        if (userPayload is null)
+            throw new UnauthorizedAccessException("Invalid credentials");
+        
+        return (UserPayload)userPayload;
+    }
 }

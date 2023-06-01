@@ -1,6 +1,7 @@
 using Mapster;
 using MediatR;
 using Microsoft.Extensions.Options;
+using Ticketing.Auth.Application.Commands;
 using Ticketing.Auth.Application.DTO;
 using Ticketing.Auth.Application.Extensions;
 using Ticketing.Auth.Application.Services;
@@ -8,7 +9,7 @@ using Ticketing.Auth.Domain.Entities;
 using Ticketing.Auth.Persistence.Repositories;
 using Ticketing.Common.DTO;
 
-namespace Ticketing.Auth.Application.Commands;
+namespace Ticketing.Auth.Application.Handlers;
 
 public class SignupCommandHandler : IRequestHandler<SignupCommand, AuthResponse>
 {

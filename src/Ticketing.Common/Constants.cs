@@ -4,4 +4,5 @@ public static class Constants
 {
     public const string JwtKey = "JWT_KEY";
     public const string Jwt = "JWT";
+    public const string User = "User";
 }
