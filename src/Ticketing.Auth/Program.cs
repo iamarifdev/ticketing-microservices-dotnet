@@ -1,8 +1,4 @@
-using FluentValidation;
-using MediatR;
 using Microsoft.OpenApi.Models;
-using Ticketing.Auth.Application.Commands;
-using Ticketing.Auth.Application.DTO;
 using Ticketing.Auth.Application.Extensions;
 using Ticketing.Common.Middlewares;
 

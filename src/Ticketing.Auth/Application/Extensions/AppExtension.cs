@@ -51,6 +51,9 @@ public static class AppExtension
 
     public static void MigrateDatabase(this WebApplication? app)
     {
+        if (app is null) return;
+        if (app.Environment.IsEnvironment("Test")) return;
+        
         using var scope = app?.Services.CreateScope();
         if (scope?.ServiceProvider is null) return;
         var serviceProvider = scope.ServiceProvider;
