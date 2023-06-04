@@ -1,0 +1,21 @@
+apiVersion: skaffold/v4beta5 latest	# 	version of the configuration.
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+      - ./infra/k8s-dev/*
+build:
+  local:
+    push: false
+  # googleCloudBuild:
+  #   projectId: ticketing-dev-360817
+  artifacts:
+    - image: arifjmamun/ticketing-auth-dotnet
+      context: src/Ticketing.Auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.cs'
+            dest: .
