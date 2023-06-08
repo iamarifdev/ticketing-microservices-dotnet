@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.Options;
 using Ticketing.Auth.Application.Commands;
 using Ticketing.Auth.Application.DTO;
+using Ticketing.Auth.Application.Exceptions;
 using Ticketing.Auth.Application.Extensions;
 using Ticketing.Auth.Application.Services;
 using Ticketing.Auth.Domain.Entities;
@@ -29,6 +30,9 @@ public class SignupCommandHandler : IRequestHandler<SignupCommand, AuthResponse>
 
     public async Task<AuthResponse> Handle(SignupCommand request, CancellationToken cancellationToken)
     {
+        var isUserExist = await _userRepository.GetByEmailAsync(request.Dto.Email);
+        if (isUserExist is not null) throw new UserAlreadyExistException(request.Dto.Email);
+        
         var user = request.Dto.Adapt<User>();
         user.Password = await PasswordService.ToHash(user.Password);
 
