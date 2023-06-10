@@ -21,13 +21,19 @@ public class CurrentUserMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        if (!context.Request.Headers.TryGetValue("Authorization", out var authHeader))
+        if (!context.Request.Headers.TryGetValue("Authorization", out var headers))
         {
             await _next(context);
             return;
         }
 
-        var token = authHeader.ToString().Replace("Bearer ", string.Empty);
+        var authHeader = headers.ToString();
+        if (!authHeader.StartsWith("Bearer "))
+        {
+            throw new UnauthorizedAccessException("Invalid Authorization header");
+        }
+        
+        var token = authHeader.Replace("Bearer ", string.Empty);
 
         try
         {
