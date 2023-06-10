@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Ticketing.Auth.Domain.Entities;
+namespace Ticketing.Common.Entities;
 
 public class BaseEntity
 {
