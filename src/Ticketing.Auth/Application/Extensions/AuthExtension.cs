@@ -1,6 +1,7 @@
 using Ticketing.Auth.Application.DTO;
 using Ticketing.Common;
 using Ticketing.Common.DTO;
+using Ticketing.Common.Exceptions;
 using Ticketing.Common.Services;
 
 namespace Ticketing.Auth.Application.Extensions;
@@ -31,7 +32,7 @@ public static class AuthExtension
         httpContextAccessor.HttpContext?.Items.TryGetValue(Constants.User, out userPayload);
         
         if (userPayload is null)
-            throw new UnauthorizedAccessException("Invalid credentials");
+            throw new UnauthorizedException("Invalid credentials");
         
         return (UserPayload)userPayload;
     }

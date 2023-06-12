@@ -7,6 +7,7 @@ using Ticketing.Auth.Application.Extensions;
 using Ticketing.Auth.Application.Services;
 using Ticketing.Auth.Persistence.Repositories;
 using Ticketing.Common.DTO;
+using Ticketing.Common.Exceptions;
 
 namespace Ticketing.Auth.Application.Handlers;
 
@@ -31,7 +32,7 @@ public class SignInCommandHandler : IRequestHandler<SignInCommand, AuthResponse>
         var user = await _userRepository.GetByEmailAsync(dto.Email.Trim());
 
         if (user is null || !await PasswordService.VerifyHash(user.Password, dto.Password))
-            throw new UnauthorizedAccessException("Invalid credentials");
+            throw new UnauthorizedException("Invalid credentials");
 
         var response = user.Adapt<AuthResponse>();
         
