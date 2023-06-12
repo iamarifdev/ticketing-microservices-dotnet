@@ -5,6 +5,7 @@ using Ticketing.Common.Extensions;
 using Ticketing.Common.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.ConfigureSerilog();
 
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
@@ -27,6 +28,7 @@ app.UseStaticFiles();
 app.UseCustomSwagger();
 
 app.UseMiddleware<CurrentUserMiddleware>();
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
