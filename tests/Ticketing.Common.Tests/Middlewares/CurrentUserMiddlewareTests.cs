@@ -57,7 +57,7 @@ public class CurrentUserMiddlewareTests
     }
 
     [Test]
-    public async Task InvokeAsync_WithInvalidToken_ShouldLogErrorAndCallNextDelegate()
+    public async Task InvokeAsync_WithInvalidToken_ShouldNotCallNextDelegate()
     {
         // Arrange
         var context = new DefaultHttpContext();
@@ -68,7 +68,6 @@ public class CurrentUserMiddlewareTests
         await middleware.InvokeAsync(context);
 
         // Assert
-        // _loggerMock.Verify(logger => logger.LogError("User identity claims not found"));
-        _nextDelegateMock.Verify(next => next(context), Times.Once);
+        _nextDelegateMock.Verify(next => next(context), Times.Never);
     }
 }
