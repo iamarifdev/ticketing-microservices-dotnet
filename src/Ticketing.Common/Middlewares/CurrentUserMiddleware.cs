@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Ticketing.Common.DTO;
+using Ticketing.Common.Exceptions;
+using Ticketing.Common.Extensions;
 
 namespace Ticketing.Common.Middlewares;
 
@@ -27,16 +29,17 @@ public class CurrentUserMiddleware
             return;
         }
 
-        var authHeader = headers.ToString();
-        if (!authHeader.StartsWith("Bearer "))
-        {
-            throw new UnauthorizedAccessException("Invalid Authorization header");
-        }
-        
-        var token = authHeader.Replace("Bearer ", string.Empty);
-
         try
         {
+            var authHeader = headers.ToString();
+            if (!authHeader.StartsWith("Bearer "))
+            {
+                _logger.LogError("Invalid Authorization header");
+                throw new UnauthorizedException("Invalid Authorization header");
+            }
+
+            var token = authHeader.Replace("Bearer ", string.Empty);
+
             var handler = new JwtSecurityTokenHandler();
             var tokenValidationParameters = new TokenValidationParameters
             {
@@ -51,7 +54,7 @@ public class CurrentUserMiddleware
             if (user.Identity is null)
             {
                 _logger.LogError("User identity claims not found");
-                throw new InvalidOperationException("User identity claims not found");
+                throw new UnauthorizedException("User identity claims not found");
             }
 
             var claims = ((ClaimsIdentity)user.Identity).Claims.ToList();
@@ -62,13 +65,13 @@ public class CurrentUserMiddleware
             var userPayload = new UserPayload(int.Parse(userId), email);
 
             context.Items["User"] = userPayload;
+
+            await _next(context);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.Message);
-            throw;
+            _logger.LogError(ex, ex.Message);
+            await context.HandleExceptionAsync(ex);
         }
-
-        await _next(context);
     }
 }
