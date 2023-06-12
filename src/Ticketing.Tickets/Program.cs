@@ -28,6 +28,7 @@ app.UseStaticFiles();
 app.UseCustomSwagger();
 
 app.UseMiddleware<CurrentUserMiddleware>();
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
