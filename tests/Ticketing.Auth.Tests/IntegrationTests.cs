@@ -7,6 +7,7 @@ using Ticketing.Auth.Application.DTO;
 using Ticketing.Auth.Application.Exceptions;
 using Ticketing.Auth.Persistence;
 using Ticketing.Common.DTO;
+using Ticketing.Common.Exceptions;
 using Ticketing.Common.Extensions;
 
 namespace Ticketing.Auth.Tests;
@@ -34,7 +35,7 @@ public class IntegrationTests : IDisposable
     }
 
     [Test]
-    public void Signup_ExistingUser_Should_Throw_UserAlreadyExistException()
+    public async Task Signup_ExistingUser_Should_Throw_UserAlreadyExistException()
     {
         // Arrange
         var client = _factory.CreateClient();
@@ -44,16 +45,17 @@ public class IntegrationTests : IDisposable
             "Test",
             "User"
         );
-        
+
         // Act
-        var exception = Assert.ThrowsAsync<UserAlreadyExistException>(async () =>
-        {
-            var response = await client.PostJsonAsync("/auth/signup", payload);
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-        });
+        var response = await client.PostJsonAsync("/auth/signup", payload);
         
         // Assert
-        exception.Should().NotBeNull();
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var result = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+        result.Should().NotBeNull();
+        result!.Message.Should().Be($"User is already exists by {payload.Email}");
+        result.StatusCode.Should().Be((int)HttpStatusCode.BadRequest);
+        result.IsSuccess.Should().Be(false);
     }
     
     [Test]
@@ -136,22 +138,22 @@ public class IntegrationTests : IDisposable
     }
 
     [Test]
-    public void SignIn_WithInvalidValidCredentials_ThrowsUnauthorizedAccessException()
+    public async Task SignIn_WithInvalidValidCredentials_Throws_UnauthorizedException()
     {
         // Arrange
         var client = _factory.CreateClient();
         var payload = new SignInCommand(TestDataHelper.TestEmail, "invalid");
 
         // Act
-        var exception = Assert.ThrowsAsync<UnauthorizedAccessException>(async () =>
-        {
-            var response = await client.PostJsonAsync("/auth/signin", payload);
-            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-        });
-
+        var response = await client.PostJsonAsync("/auth/signin", payload);
+        
         // Assert
-        exception.Should().NotBeNull();
-        exception!.Message.Should().Be("Invalid credentials");
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        var result = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+        result.Should().NotBeNull();
+        result!.Message.Should().Be("Invalid credentials");
+        result.StatusCode.Should().Be((int)HttpStatusCode.Unauthorized);
+        result.IsSuccess.Should().Be(false);
     }
 
     [Test]
@@ -177,21 +179,21 @@ public class IntegrationTests : IDisposable
     }
     
     [Test]
-    public void CurrentUser_ThrowsUnauthorizedAccessException_When_User_Not_LoggedIn()
+    public async Task CurrentUser_Throws_UnauthorizedException_When_User_Not_LoggedIn()
     {
         // Arrange
         var client = _factory.CreateClient();
 
         // Act
-        var exception = Assert.ThrowsAsync<UnauthorizedAccessException>(async () =>
-        {
-            var response = await client.GetJsonAsync("/auth/currentuser");
-            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-        });
+        var response = await client.GetJsonAsync("/auth/currentuser");
         
         // Assert
-        exception.Should().NotBeNull();
-        exception!.Message.Should().Be("Invalid credentials");
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        var result = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+        result.Should().NotBeNull();
+        result!.Message.Should().Be("Invalid credentials");
+        result.StatusCode.Should().Be((int)HttpStatusCode.Unauthorized);
+        result.IsSuccess.Should().Be(false);
     }
     
     [Test]
