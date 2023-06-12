@@ -1,9 +1,12 @@
+using System.Net;
+using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Ticketing.Common.DTO;
+using Ticketing.Common.Exceptions;
 
 namespace Ticketing.Common.Extensions;
 
@@ -25,7 +28,7 @@ public static class AppExtension
         httpContextAccessor.HttpContext?.Items.TryGetValue(Constants.User, out userPayload);
 
         if (userPayload is null)
-            throw new UnauthorizedAccessException("Invalid credentials");
+            throw new UnauthorizedException("Invalid credentials");
 
         return (UserPayload)userPayload;
     }
@@ -34,5 +37,29 @@ public static class AppExtension
     {
         builder.Host.UseSerilog((context, configuration) =>
             configuration.ReadFrom.Configuration(context.Configuration));
+    }
+    
+    public static Task HandleExceptionAsync(this HttpContext context, Exception ex)
+    {
+        var statusCode = HttpStatusCode.InternalServerError;
+        var errorMessage = "An error occurred.";
+
+        if (ex is HttpException httpException)
+        {
+            statusCode = (HttpStatusCode)httpException.StatusCode;
+            errorMessage = httpException.Message;
+        }
+
+        var errorResponse = new ErrorResponse
+        {
+            StatusCode = (int)statusCode,
+            Message = errorMessage
+        };
+
+        var json = JsonSerializer.Serialize(errorResponse);
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = (int)statusCode;
+
+        return context.Response.WriteAsync(json);
     }
 }
