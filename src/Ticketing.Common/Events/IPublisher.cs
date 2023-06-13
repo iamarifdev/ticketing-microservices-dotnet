@@ -2,5 +2,5 @@ namespace Ticketing.Common.Events;
 
 public interface IPublisher<in TEvent> where TEvent : IEvent
 {
-    Task Publish(TEvent @event);
+    Task Publish(TEvent @event, CancellationToken cancellationToken);
 }
