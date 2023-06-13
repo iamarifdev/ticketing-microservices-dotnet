@@ -66,6 +66,7 @@ public static class SwaggerExtension
             ".Replace("\r\n", "").Replace("\n", "");
             
             options.Interceptors.ResponseInterceptorFunction = jsInterceptor;
+            options.EnablePersistAuthorization();
         });
     }
 }
