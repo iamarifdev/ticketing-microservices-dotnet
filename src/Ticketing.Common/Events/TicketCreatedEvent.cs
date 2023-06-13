@@ -1,16 +1,7 @@
 namespace Ticketing.Common.Events;
 
-public record TicketCreatedEventData(
-    string Id, string Version, string Title, decimal Price, string UserId);
-
-public class TicketCreatedEvent : IEvent<TicketCreatedEventData>
+public record TicketCreatedEvent(
+    string Id, string Version, string Title, decimal Price, string UserId) : IEvent
 {
-    public TicketCreatedEvent(TicketCreatedEventData data)
-    {
-        Subject = Subjects.TicketCreated;
-        Data = data;
-    }
-
-    public Subjects Subject { get; }
-    public TicketCreatedEventData Data { get; }
+    public Subjects Subject => Subjects.TicketCreated;
 }

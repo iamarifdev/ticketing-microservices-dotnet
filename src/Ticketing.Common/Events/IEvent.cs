@@ -1,7 +1,6 @@
 namespace Ticketing.Common.Events;
 
-public interface IEvent<out T>
+public interface IEvent
 {
     Subjects Subject { get; }
-    T Data { get; }
 }
