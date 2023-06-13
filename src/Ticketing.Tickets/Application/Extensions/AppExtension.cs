@@ -1,7 +1,9 @@
 using FluentValidation;
+using MassTransit;
 using Ticketing.Tickets.Application.Commands;
 using Ticketing.Tickets.Application.Mapping;
 using Ticketing.Tickets.Application.Validators;
+using Ticketing.Tickets.Domain.Events.Publishers;
 using Ticketing.Tickets.Persistence.Repositories;
 using Ticketing.Tickets.Presentation.Routes;
 
@@ -22,6 +24,17 @@ public static class AppExtension
     public static void RegisterServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<ITicketRepository, TicketRepository>();
+    }
+    
+    public static void RegisterEventPublishers(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddScoped<TicketCreatedPublisher>();
+    }
+    
+    public static void RegisterEventConsumers(this IRabbitMqReceiveEndpointConfigurator endpoint)
+    {
+        // Configure Consumer here
+        // endpoint.Consumer<>();
     }
     
     public static void MapRoutes(this WebApplication app)
