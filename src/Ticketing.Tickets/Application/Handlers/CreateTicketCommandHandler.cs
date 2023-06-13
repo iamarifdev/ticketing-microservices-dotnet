@@ -26,7 +26,8 @@ public class CreateTicketCommandHandler : IRequestHandler<CreateTicketCommand, T
         _ticketCreatedPublisher = ticketCreatedPublisher;
     }
 
-    public async Task<TicketResponse> Handle(CreateTicketCommand dto, CancellationToken cancellationToken)
+    public async Task<TicketResponse> Handle(
+        CreateTicketCommand dto, CancellationToken cancellationToken)
     {
         var currentUser = _httpContextAccessor.GetCurrentUser();
         var ticket = await _ticketRepository.CreateAsync(new Ticket
@@ -34,16 +35,15 @@ public class CreateTicketCommandHandler : IRequestHandler<CreateTicketCommand, T
             Price = dto.Price,
             Title = dto.Title,
             UserId = currentUser.Id.ToString(),
-            Version = 1
         }, cancellationToken);
 
-        await _ticketCreatedPublisher.Publish(
-            new TicketCreatedEvent(
-                ticket.Id.ToString(),
-                ticket.Version.ToString(),
-                ticket.Title,
-                ticket.Price,
-                ticket.UserId));
+        await _ticketCreatedPublisher.Publish(new TicketCreatedEvent(
+            ticket.Id.ToString(),
+            ticket.Version.ToString(),
+            ticket.Title,
+            ticket.Price,
+            ticket.UserId),
+            cancellationToken);
 
         return ticket.Adapt<TicketResponse>();
     }

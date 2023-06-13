@@ -16,7 +16,10 @@ public class Ticket : BaseEntity
 
     [Required] [MaxLength(50)] public required string UserId { get; set; }
 
-    [Required] [MaxLength(10)] public required byte Version { get; set; }
+    [Required]
+    [MaxLength(10)]
+    [ConcurrencyCheck]
+    public byte Version { get; set; } = 1;
 
     [MaxLength(50)] public string? OrderId { get; set; }
 }
