@@ -1,4 +1,4 @@
-apiVersion: skaffold/v4beta5 latest	# 	version of the configuration.
+apiVersion: skaffold/v4beta5	# 	version of the configuration.
 kind: Config
 deploy:
   kubectl:
@@ -13,8 +13,8 @@ build:
   artifacts:
     - image: arifjmamun/ticketing-auth-dotnet
       context: src/Ticketing.Auth
-      docker:
-        dockerfile: Dockerfile
+#      docker:
+#        dockerfile: Dockerfile
       sync:
         manual:
           - src: 'src/**/*.cs'
