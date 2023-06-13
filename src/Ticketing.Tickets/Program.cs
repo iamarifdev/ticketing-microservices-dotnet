@@ -5,9 +5,8 @@ using Ticketing.Common.Middlewares;
 using Ticketing.Tickets.Application.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.ConfigureSerilog();
-
-
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 builder.AddSwagger(serviceName: "Ticket");
@@ -17,6 +16,8 @@ builder.AddMapping();
 builder.AddDbContext<TicketDbContext>();
 builder.AddMediatR<CreateTicketCommandHandler>();
 builder.RegisterServices();
+builder.AddMassTransit(endpoint => endpoint.RegisterEventConsumers());
+builder.RegisterEventPublishers();
 builder.ConfigureRoute();
 builder.AddFluentValidation();
 
