@@ -19,6 +19,7 @@ public static class AppExtension
     public static void AddFluentValidation(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<IValidator<CreateTicketCommand>, CreateTicketCommandValidator>();
+        builder.Services.AddScoped<IValidator<UpdateTicketCommand>, UpdateTicketCommandValidator>();
     }
 
     public static void RegisterServices(this WebApplicationBuilder builder)
@@ -29,6 +30,7 @@ public static class AppExtension
     public static void RegisterEventPublishers(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<TicketCreatedPublisher>();
+        builder.Services.AddScoped<TicketUpdatedPublisher>();
     }
     
     public static void RegisterEventConsumers(this IRabbitMqReceiveEndpointConfigurator endpoint)
@@ -43,10 +45,9 @@ public static class AppExtension
             .WithTags("Tickets Service")
             .WithName("Tickets Service");
         
-        tickets.MapPost("/", TicketRouteHandlers.CreateTicket).WithName("CreateTicket");
-        // todo: add get all
-        // todo: add new
-        // todo: show ticket
-        // todo: update
+        tickets.MapPost("/", TicketRouteHandlers.CreateTicket)
+            .WithName("CreateTicket");
+        tickets.MapPut("/{id:int}", TicketRouteHandlers.UpdateTicket)
+            .WithName("UpdateTicket");
     }
 }
