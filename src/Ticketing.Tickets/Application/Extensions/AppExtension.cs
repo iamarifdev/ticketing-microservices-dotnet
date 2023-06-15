@@ -43,7 +43,8 @@ public static class AppExtension
     {
         var tickets = app.MapGroup("/tickets")
             .WithTags("Tickets Service")
-            .WithName("Tickets Service");
+            .WithName("Tickets Service")
+            .RequireAuthorization();
         
         tickets.MapPost("/", TicketRouteHandlers.CreateTicket)
             .WithName("CreateTicket");

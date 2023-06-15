@@ -7,34 +7,37 @@ using Ticketing.Tickets.Application.Handlers;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.ConfigureSerilog();
-builder.Services.AddControllers();
-builder.Services.AddHttpContextAccessor();
-builder.AddSwagger(serviceName: "Ticket");
 
-// Configure services
+builder.AddJwtAuthentication();
+builder.Services.AddAuthorization();
+
 builder.AddMapping();
 builder.AddDbContext<TicketDbContext>();
-builder.AddMediatR<CreateTicketCommandHandler>();
 builder.RegisterServices();
+
 builder.AddMassTransit(endpoint => endpoint.RegisterEventConsumers());
 builder.RegisterEventPublishers();
+
+builder.Services.AddHttpContextAccessor();
+builder.AddMediatR<CreateTicketCommandHandler>();
 builder.ConfigureRoute();
 builder.AddFluentValidation();
+builder.AddSwagger(serviceName: "Ticket");
 
 var app = builder.Build();
 
 app.MigrateDatabase<TicketDbContext>();
 
-app.UseStaticFiles();
+app.UseAuthentication();
+
 app.UseCustomSwagger();
 
-app.UseMiddleware<CurrentUserMiddleware>();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
 app.UseAuthorization();
-
 app.MapRoutes();
 
 app.Run();
