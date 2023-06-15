@@ -32,9 +32,13 @@ public static class AppExtension
             .WithTags("Auth Service")
             .WithName("Auth Service");
         
-        auth.MapGet("/currentuser", AuthRouteHandlers.GetCurrentUser).WithName("CurrentUser");
+        auth.MapGet("/currentuser", AuthRouteHandlers.GetCurrentUser)
+            .WithName("CurrentUser")
+            .RequireAuthorization();
         auth.MapPost("/signup", AuthRouteHandlers.Signup).WithName("Signup");
         auth.MapPost("/signin", AuthRouteHandlers.SignIn).WithName("Signin");
-        auth.MapPost("/signout", AuthRouteHandlers.SignOut).WithName("SignOut");
+        auth.MapPost("/signout", AuthRouteHandlers.SignOut)
+            .WithName("SignOut")
+            .RequireAuthorization();
     }
 }

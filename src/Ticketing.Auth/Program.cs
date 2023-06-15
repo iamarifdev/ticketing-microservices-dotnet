@@ -5,35 +5,36 @@ using Ticketing.Common.Extensions;
 using Ticketing.Common.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.ConfigureSerilog();
 
-builder.Services.AddControllers();
-builder.Services.AddHttpContextAccessor();
+builder.AddJwtAuthentication();
+builder.Services.AddAuthorization();
 
-builder.AddSwagger(serviceName: "Auth");
-
-// Configure services
 builder.AddMapping();
 builder.AddDbContext<AuthDbContext>();
-builder.AddMediatR<SignupCommandHandler>();
 builder.RegisterServices();
+
+builder.Services.AddHttpContextAccessor();
+builder.AddMediatR<SignupCommandHandler>();
 builder.ConfigureRoute();
 builder.AddFluentValidation();
+builder.AddSwagger(serviceName: "Auth");
 
 var app = builder.Build();
 
 app.MigrateDatabase<AuthDbContext>();
 
-app.UseStaticFiles();
+app.UseAuthentication();
+
 app.UseCustomSwagger();
 
-app.UseMiddleware<CurrentUserMiddleware>();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
 app.UseAuthorization();
-
 app.MapRoutes();
 
 app.Run();
