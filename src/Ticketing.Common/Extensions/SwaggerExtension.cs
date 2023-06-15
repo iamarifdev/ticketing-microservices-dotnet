@@ -1,7 +1,9 @@
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace Ticketing.Common.Extensions;
 
@@ -33,9 +35,11 @@ public static class SwaggerExtension
                         }
                     },
                     Array.Empty<string>()
-                }
+                }   
             });
+            config.ExampleFilters();
         });
+        builder.Services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
     }
 
     public static void UseCustomSwagger(this WebApplication app)

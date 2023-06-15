@@ -38,7 +38,7 @@ public static class AppExtension
         builder.Host.UseSerilog((context, configuration) =>
             configuration.ReadFrom.Configuration(context.Configuration));
     }
-    
+
     public static Task HandleExceptionAsync(this HttpContext context, Exception ex)
     {
         var statusCode = HttpStatusCode.InternalServerError;
