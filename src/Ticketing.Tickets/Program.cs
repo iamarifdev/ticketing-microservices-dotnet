@@ -1,7 +1,6 @@
 using Ticketing.Tickets.Application.Extensions;
 using Ticketing.Tickets.Persistence;
 using Ticketing.Common.Extensions;
-using Ticketing.Common.Middlewares;
 using Ticketing.Tickets.Application.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,8 +14,10 @@ builder.AddMapping();
 builder.AddDbContext<TicketDbContext>();
 builder.RegisterServices();
 
-builder.AddMassTransit(endpoint => endpoint.RegisterEventConsumers());
-builder.RegisterEventPublishers();
+builder.AddServiceBus(
+    x => x.RegisterEventPublishers(),
+    y => y.RegisterEventConsumers()
+);
 
 builder.Services.AddHttpContextAccessor();
 builder.AddMediatR<CreateTicketCommandHandler>();
@@ -32,7 +33,7 @@ app.UseAuthentication();
 
 app.UseCustomSwagger();
 
-app.UseMiddleware<ExceptionHandlerMiddleware>();
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 

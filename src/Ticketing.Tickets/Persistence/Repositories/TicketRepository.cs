@@ -1,3 +1,4 @@
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Ticketing.Tickets.Domain.Entities;
 
@@ -20,7 +21,13 @@ public class TicketRepository : ITicketRepository
     }
 
     public async Task<Ticket?> GetByIdAsync(int id, CancellationToken cancellationToken) 
-        => await _context.Tickets.FindAsync(id, cancellationToken);
+        => await _context.Tickets.FindAsync(new object?[] { id, cancellationToken }, cancellationToken: cancellationToken);
+
+    public async Task<List<Ticket>> GetListAsync(CancellationToken cancellationToken) =>
+        await _context.Tickets
+            .Where(x => x.OrderId == null)
+            .ProjectToType<Ticket>()
+            .ToListAsync(cancellationToken);
 
     public async Task UpdateAsync(Ticket ticket, CancellationToken cancellationToken)
     {

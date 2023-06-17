@@ -6,7 +6,7 @@ namespace Ticketing.Tickets.Application.Exceptions
     [Serializable]
     public class TicketNotFoundException : NotFoundException
     {
-        public TicketNotFoundException(int id) : base($"Ticket is not found by ID: ${id}")
+        public TicketNotFoundException(int id) : base($"Ticket is not found by ID: {id}")
         {
         }
 

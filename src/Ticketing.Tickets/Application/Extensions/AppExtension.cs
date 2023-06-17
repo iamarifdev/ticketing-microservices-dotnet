@@ -46,6 +46,10 @@ public static class AppExtension
             .WithName("Tickets Service")
             .RequireAuthorization();
         
+        tickets.MapGet("/", TicketRouteHandlers.GetTickets)
+            .WithName("GetTickets");
+        tickets.MapGet("/{id:int}", TicketRouteHandlers.GetTicketById)
+            .WithName("GetTicketById");
         tickets.MapPost("/", TicketRouteHandlers.CreateTicket)
             .WithName("CreateTicket");
         tickets.MapPut("/{id:int}", TicketRouteHandlers.UpdateTicket)
