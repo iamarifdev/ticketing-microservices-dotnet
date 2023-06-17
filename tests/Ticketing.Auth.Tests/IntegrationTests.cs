@@ -191,7 +191,7 @@ public class IntegrationTests : IDisposable
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         var result = await response.Content.ReadFromJsonAsync<ErrorResponse>();
         result.Should().NotBeNull();
-        result!.Message.Should().Be("Invalid credentials");
+        result!.Message.Should().Be("Unauthorized access");
         result.StatusCode.Should().Be((int)HttpStatusCode.Unauthorized);
         result.IsSuccess.Should().Be(false);
     }
