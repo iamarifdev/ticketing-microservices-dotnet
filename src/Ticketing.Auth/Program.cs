@@ -2,7 +2,6 @@ using Ticketing.Auth.Application.Extensions;
 using Ticketing.Auth.Application.Handlers;
 using Ticketing.Auth.Persistence;
 using Ticketing.Common.Extensions;
-using Ticketing.Common.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +28,7 @@ app.UseAuthentication();
 
 app.UseCustomSwagger();
 
-app.UseMiddleware<ExceptionHandlerMiddleware>();
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
