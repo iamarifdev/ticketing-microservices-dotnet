@@ -8,14 +8,16 @@ namespace Ticketing.Common.Extensions
 {
     public static class MassTransitExtension
     {
-        public static void AddMassTransit(
+        public static void AddServiceBus(
             this WebApplicationBuilder builder,
-            Action<IRabbitMqReceiveEndpointConfigurator> configureEndpoint)
+            Action<WebApplicationBuilder> registerPublishers,
+            Action<IRabbitMqReceiveEndpointConfigurator> registerListeners)
         {
             var config = builder.Configuration
                 .GetSection(nameof(RabbitMqConfig))
                 .Get<RabbitMqConfig>() ?? new RabbitMqConfig();
-            
+
+            registerPublishers(builder);
             
             builder.Services.AddMassTransit(x =>
             {
@@ -25,7 +27,7 @@ namespace Ticketing.Common.Extensions
                         h.Username(config.User);
                         h.Password(config.Password);
                     });
-                    cfg.ReceiveEndpoint(QueueGroup.TicketService.ToString(), configureEndpoint);
+                    cfg.ReceiveEndpoint(QueueGroup.TicketService.ToString(), registerListeners);
                     cfg.ConfigureEndpoints(context);
                 });
             });

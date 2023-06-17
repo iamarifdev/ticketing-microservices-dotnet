@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Ticketing.Common.DTO;
 using Ticketing.Common.Exceptions;
+using Ticketing.Common.Middlewares;
 
 namespace Ticketing.Common.Extensions;
 
@@ -61,5 +62,10 @@ public static class AppExtension
         context.Response.StatusCode = (int)statusCode;
 
         return context.Response.WriteAsync(json);
+    }
+
+    public static void UseExceptionHandler(this WebApplication app)
+    {
+        app.UseMiddleware<ExceptionHandlerMiddleware>();
     }
 }

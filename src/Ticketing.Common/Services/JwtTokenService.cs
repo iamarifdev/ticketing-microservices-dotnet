@@ -16,7 +16,7 @@ public static class JwtTokenService
             new(ClaimTypes.Email, userPayload.Email)
         };
 
-        // todo: use RSA cryptography to sign the token instead of HMAC (private/public key)
+        // TODO: use RSA cryptography to sign the token instead of HMAC (private/public key)
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtConfig.JwtKey));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
