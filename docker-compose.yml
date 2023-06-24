@@ -1,0 +1,44 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: src/Ticketing.Auth/Dockerfile
+#    image: "arifjmamun/ticketing-auth-dotnet"
+    container_name: "ticketing-auth"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development # debug runs in development mode
+      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_ConnectionStrings__AuthDbContext=Username=postgres;Password=postgres;Host=postgres;Port=5432;Database=AuthDb
+    networks:
+      - ticketing
+
+  postgres:
+    image: "postgres:latest"
+    container_name: "ticketing-postgres"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - ticketing
+    volumes:
+      - postgresdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  ticketing:
+  
+volumes:
+  postgresdata:
