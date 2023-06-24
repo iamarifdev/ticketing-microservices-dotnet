@@ -23,7 +23,7 @@ spec:
               name: management
           env:
             - name: RABBITMQ_DEFAULT_USER
-              value: admin
+              value: user
             - name: RABBITMQ_DEFAULT_PASS
               value: password
 ---
